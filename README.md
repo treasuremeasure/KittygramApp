@@ -23,7 +23,7 @@ Used libraries:
 ## Installation of the project:
 Clone the repository and change into it on the command line:
 
-  git clone https://github.com/mityay36/infra_sprint1/
+  git clone 
 
 Make your own .env file in main directory. All required variables are listed in .env.example
  
@@ -92,25 +92,5 @@ Reload nginx
     sudo service nginx reload
   
 
-## Author
-Orduhani Riza
-
-
-
-
-
-
-
-- зарегаться на dockerhub (ник залить в docker compose)
-- вм на yandex cloud (ip залить в env)
-- деплоим код на сервер и читаем readme
-- проверить работает ли код
-- ci/cd на гитхабе должен быть успешным
-
-
-
-
-
-- cекреты на гитхаб
-- выполняю по рид ме
-- запустить тесты
+### Author
+[Orduhani Riza](https://github.com/treasuremeasure)
