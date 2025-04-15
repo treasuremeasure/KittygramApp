@@ -1,96 +1,97 @@
-# KITTYGRAM
+✅ В ходе этого проекта были выполнены следующие задачи:​
 
-Kittygram is a delightful web application that serves as a centralized database for all cat enthusiasts. Whether you're a proud cat owner or simply a fan of these furry friends, Kittygram allows users to create and share personalized "cat cards" showcasing the unique details of their feline companions.
+- Создан проект Kittygram на GitHub.
 
-Used libraries:  
-- [Django                        3.2.3](https://docs.djangoproject.com/en/3.2/)  
-- [djangorestframework           3.12.4](https://www.django-rest-framework.org/)  
-- [djangorestframework-simplejwt 4.8.0](https://django-rest-framework-simplejwt.readthedocs.io/)
+- Внесены изменения в код бэкенда для работы с СУБД PostgreSQL.
 
-## Features
+- Настроено проксирование в Nginx к бэкенду.
 
-### Cat Cards
-- Photo: Upload a charming photo of your cat to showcase their adorable face.
-- Name: Provide your cat's name, because every feline deserves to be recognized.
-- Date of Birth: Record your cat's birthday to celebrate and track their age.
-- Color: Share the distinctive coat color of your cat, highlighting their individuality.
-- Achievements: Brag about your cat's accomplishments or funny quirks by adding achievements to their card.
+- Описана сборка бэкенда Kittygram в Dockerfile.
 
-### Community Achievements
-- Contribute: Users can add new achievements to the community pool, creating a growing list of feline accomplishments.
-- Explore: Discover and add community achievements to your cat's card to showcase their unique talents.
+- Настроен запуск проекта Kittygram в контейнерах с помощью Docker Compose.
 
-## Installation of the project:
-Clone the repository and change into it on the command line:
+- Настроено автоматическое тестирование.
 
-  git clone https://github.com/treasuremeasure/cloud-services-engineer-kittygram-final_mine.git
+- Выполнен деплой проекта на удалённый сервер.​
 
-Make your own .env file in main directory. All required variables are listed in .env.example
- 
-Perform Docker images
+🐱 Kittygram
 
-    cd frontend
-    docker build -t YOUR_USERNAME/kittygram_frontend .
-    cd ../backend
-    docker build -t YOUR_USERNAME/kittygram_backend .
-    cd ../nginx
-    docker build -t YOUR_USERNAME/kittygram_gateway . 
+Kittygram — это веб-приложение, позволяющее пользователям создавать и делиться карточками своих кошек. Каждая карточка содержит информацию о питомце, включая фотографию, имя, возраст и породу. Приложение разработано с использованием Django и React, упаковано в Docker-контейнеры и развёрнуто с помощью Docker Compose.​
 
-Push your images to Docker Hub
+🔄 CI/CD
 
-    docker push YOUR_USERNAME/kittygram_frontend
-    docker push YOUR_USERNAME/kittygram_backend
-    docker push YOUR_USERNAME/kittygram_gateway
+Процесс CI/CD разделён на два уровня:
 
-Connect to our remote server
+CI (Continuous Integration): пайплайн main.yml автоматически запускает тесты, собирает Docker-образы для фронтенда, бэкенда и шлюза, и пушит их в Docker Hub.
 
-    ssh -i PATH_TO_SSH_KEY/SSH_KEY_NAME YOUR_USERNAME@SERVER_IP_ADDRESS 
+CD (Continuous Deployment): после успешной сборки docker-compose.production.yml используется на сервере для скачивания и запуска готовых образов.
 
-Make an "kittygram" directory
+🚀 Стек технологий
 
-    mkdir kittygram
+Backend: Django 3.2.3, Django REST Framework 3.12.4, PostgreSQL
 
-Download DockerCompose on the server
+Frontend: React, Node.js
 
-    sudo apt update
-    sudo apt install curl
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh
-    sudo apt install docker-compose
+Аутентификация: JWT (djangorestframework-simplejwt 4.8.0)
 
-Copy docker-compose.production.yml and .env files to your server
+CI/CD: GitHub Actions
 
-    scp -i PATH_TO_SSH_KEY/SSH_KEY_NAME docker-compose.production.yml YOUR_USERNAME@SERVER_IP_ADDRESS:/home/YOUR_USERNAME/kittygram/docker-compose.production.yml
+Контейнеризация: Docker, Docker Compose
 
-Start Docker Compose in daemon mode
+Веб-сервер: Nginx​
 
-    sudo docker-compose -f /home/YOUR_USERNAME/kittygram/docker-compose.production.yml up -d
+📦 Установка и запуск
 
-Make migrations and collect static of your project
+1. Клонируйте репозиторий:
 
-    sudo docker-compose -f /home/YOUR_USERNAME/kittygram/docker-compose.production.yml exec backend python manage.py migrate
-    sudo docker-compose -f /home/YOUR_USERNAME/kittygram/docker-compose.production.yml exec backend python manage.py collectstatic
-    sudo docker-compose -f /home/YOUR_USERNAME/kittygram/docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
+git clone https://github.com/treasuremeasure/cloud-services-engineer-kittygram-final_mine.git
+cd cloud-services-engineer-kittygram-final_mine
 
-Open nginx configuration file
+2. Создайте файл окружения .env на основе _env.example:
 
-    sudo nano /etc/nginx/sites-enabled/default
+cp _env.example .env
 
-Update your server location section
+Отредактируйте .env, указав необходимые переменные окружения.​
 
-    location / {
-        proxy_set_header Host $http_host;
-        proxy_pass http://127.0.0.1:9000;
-    }
+3. Запустите проект с помощью Docker Compose:
 
-Make sure the cof file is ok
+docker-compose -f docker-compose.production.yml up --build
 
-    sudo nginx -t
+4. Выполните миграции и соберите статику:
 
-Reload nginx
+docker-compose -f docker-compose.production.yml exec backend python manage.py migrate
+docker-compose -f docker-compose.production.yml exec backend python manage.py collectstatic --noinput
 
-    sudo service nginx reload
-  
+🧪 Тестирование
 
-### Author
-[Orduhani Riza](https://github.com/treasuremeasure)
+Для запуска тестов выполните:​
+
+docker-compose -f docker-compose.production.yml exec backend pytest
+
+Также настроено автоматическое тестирование с использованием GitHub Actions.​
+
+🌐 Доступ к приложению
+
+После успешного запуска приложение будет доступно по адресу:​
+
+http://localhost:9000
+
+Nginx проксирует запросы к соответствующим сервисам фронтенда и бэкенда.​
+
+📁 Структура проекта
+.
+├── backend/               # Код бэкенда на Django
+├── frontend/              # Код фронтенда на React
+├── nginx/                 # Конфигурация Nginx
+├── tests/                 # Тесты
+├── docker-compose.production.yml  # Docker Compose файл для продакшена
+├── .env                   # Переменные окружения
+├── _env.example           # Пример файла .env
+├── README.md              # Документация проекта
+└── ...
+
+🤝 Контакты
+
+Разработчик: orduhaniriza@gmail.com
+
+Если у вас есть предложения или замечания, пожалуйста, создайте issue или отправьте pull request.
