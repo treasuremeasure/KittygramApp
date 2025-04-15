@@ -12,22 +12,26 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
   backend:
-    image: treasuremeasure/kittygram_backend  #зарегаться в dockerhub
+    image: treasuremeasure/kittygram_backend  
     env_file: .env
     volumes:
       - static:/backend_static
       - media:/media
+    depends_on:
+      - db
   frontend:
     env_file: .env
-    image: treasuremeasure/kittygram_frontend  #зарегаться в dockerhub
+    image: treasuremeasure/kittygram_frontend  
     command: cp -r /app/build/. /static/
     volumes:
       - static:/static
   gateway:
-    image: treasuremeasure/kittygram_gateway #зарегаться в dockerhub
+    image: treasuremeasure/kittygram_gateway 
     env_file: .env
     ports:
       - 9000:80
     volumes:
       - static:/static
       - media:/media
+    depends_on:
+      - backend
