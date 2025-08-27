@@ -1,0 +1,52 @@
+name: Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Select the Terrafrom action'
+        required: true
+        default: plan
+        options:
+          - plan
+          - apply
+          - destroy
+
+jobs:
+
+  terraform_plan:
+    name: terraform plan
+    runs-on: ubuntu-latest
+    steps:
+      - name: terraform plan
+      - working-directory: ../../infra
+        if: ${{ github.event.inputs.action == 'plan' }      
+        run: terraform_plan
+        env:
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+  terraform_apply:
+    name: terraform apply
+    runs-on: ubuntu-latest
+    steps:
+      - name: terraform apply
+      - working-directory: ../../infra
+        if: ${{ github.event.inputs.action == 'apply' }      
+        run: terraform_apply
+        env:
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+  terraform_destroy:
+    name: terraform destroy
+    runs-on: ubuntu-latest
+    steps:
+      - name: terraform destroy
+      - working-directory: ../../infra
+        if: ${{ github.event.inputs.action == 'destroy' }      
+        run: terraform_destroy
+        env:
+          ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  
