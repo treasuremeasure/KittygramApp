@@ -17,9 +17,11 @@ services:
     volumes:
       - static:/backend_static
       - media:/media
+    depends_on:
+      - db
   frontend:
     env_file: .env
-    image: treasuremeasure/kittygram_frontend
+    image: treasuremeasure/kittygram_frontend  
     command: cp -r /app/build/. /static/
     volumes:
       - static:/static
@@ -31,3 +33,5 @@ services:
     volumes:
       - static:/static
       - media:/media
+    depends_on:
+      - backend
