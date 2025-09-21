@@ -15,7 +15,7 @@ services:
     networks:
       - "kittygram_network"
   backend:
-    image: treasuremeasure/kittygram_backend  
+    image: treasuremeasure/kittygram_final_backend  
     env_file: .env
     volumes:
       - media:/app/media
@@ -27,7 +27,7 @@ services:
     restart: always
   frontend:
     env_file: .env
-    image: treasuremeasure/kittygram_frontend  
+    image: treasuremeasure/kittygram_final_frontend 
     networks:
       - "kittygram_network"
     depends_on:
@@ -35,7 +35,7 @@ services:
     volumes:
       - static_frontend:/app/build
   gateway:
-    image: treasuremeasure/kittygram_gateway 
+    image: treasuremeasure/kittygram_final_gateway 
     env_file: .env
     ports:
       - 80:80
