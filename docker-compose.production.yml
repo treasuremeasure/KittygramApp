@@ -47,6 +47,7 @@ services:
       - static_frontend:/usr/share/nginx/html/frontend
     depends_on:
       - backend
+    restart: always
 
 networks:
   kittygram_network:
