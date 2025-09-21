@@ -4,6 +4,7 @@ volumes:
   pg_data:
   static:
   media:
+  static_frontend:
 
 services:
   db:
@@ -11,27 +12,42 @@ services:
     env_file: .env
     volumes:
       - pg_data:/var/lib/postgresql/data
+    networks:
+      - "kittygram_network"
   backend:
     image: treasuremeasure/kittygram_backend  
     env_file: .env
     volumes:
-      - static:/backend_static
-      - media:/media
+      - media:/app/media
+      - static:/app/collected_static
+    networks:
+      - "kittygram_network"
     depends_on:
       - db
+    restart: always
   frontend:
     env_file: .env
     image: treasuremeasure/kittygram_frontend  
-    command: cp -r /app/build/. /static/
+    networks:
+      - "kittygram_network"
+    depends_on:
+      - backend
     volumes:
-      - static:/static
+      - static_frontend:/app/build
   gateway:
     image: treasuremeasure/kittygram_gateway 
     env_file: .env
     ports:
       - 9000:80
+    networks:
+      - "kittygram_network"
     volumes:
-      - static:/static
-      - media:/media
+      - media:/var/www/media
+      - static:/usr/share/nginx/html/backend
+      - static_frontend:/usr/share/nginx/html/frontend
     depends_on:
       - backend
+
+networks:
+  kittygram_network:
+    driver: "bridge"
