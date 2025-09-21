@@ -1,0 +1,69 @@
+name: Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Select the Terraform action'
+        required: true
+        default: plan
+        options:
+          - plan
+          - apply
+          - destroy
+
+env:
+  TF_VAR_user: "${{ secrets.USER }}"
+  ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  TF_VAR_token: ${{ secrets.YCLOUD_TOKEN }}
+  TF_VAR_cloud_id: ${{ secrets.CLOUD_ID }}
+  TF_VAR_folder_id: ${{ secrets.FOLDER_ID }}
+  TF_VAR_image_id: ${{ secrets.IMAGE_ID }}
+  TF_VAR_zone: ${{ secrets.YCLOUD_ZONE }}
+  TF_VAR_ycloud_s3_name: ${{ secrets.YCLOUD_S3_NAME }}
+  TF_VAR_vm_ssh_key: ${{ secrets.SSH_KEY_FOR_VM }}
+  TF_VAR_vm_ssh_passphrase: ${{ secrets.SSH_PASSPHRASE }}
+
+jobs:
+  terraform_plan:
+    if: ${{ inputs.action == 'plan' }}
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init
+        working-directory: infra
+        run: terraform init -backend-config="access_key=$ACCESS_KEY" -backend-config="secret_key=$SECRET_KEY"
+      - name: Terraform Plan
+        working-directory: infra
+        run: terraform plan
+
+  terraform_apply:
+    if: ${{ inputs.action == 'apply' }}
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init
+        working-directory: infra
+        run: terraform init -backend-config="access_key=$ACCESS_KEY" -backend-config="secret_key=$SECRET_KEY"
+      - name: Terraform Apply
+        working-directory: infra
+        run: terraform apply -auto-approve
+
+  terraform_destroy:
+    if: ${{ inputs.action == 'destroy' }}
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init
+        working-directory: infra
+        run: terraform init -backend-config="access_key=$ACCESS_KEY" -backend-config="secret_key=$SECRET_KEY"
+      - name: Terraform Destroy
+        working-directory: infra
+        run: terraform destroy -auto-approve

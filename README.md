@@ -23,7 +23,7 @@ Used libraries:
 ## Installation of the project:
 Clone the repository and change into it on the command line:
 
-  git clone 
+  git clone https://github.com/treasuremeasure/cloud-services-engineer-kittygram-final_mine.git
 
 Make your own .env file in main directory. All required variables are listed in .env.example
  
